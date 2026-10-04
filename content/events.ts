@@ -3,8 +3,8 @@
  * ---------------------------------------------------------------------------
  * Add a new event by copying one block and changing the details.
  * Dates are written as "YYYY-MM-DD" (for example "2026-10-17").
- * Times are New Zealand time. The site sorts events automatically and
- * moves them to "Past events" the day after they happen.
+ * Times are New Zealand time. The site sorts events automatically into
+ * upcoming and past each time it is published (redeploy after editing).
  *
  * Photos: put them in /public/images/events/ and list them under `photos`.
  * The first photo is the cover. Events without photos get a designed card.

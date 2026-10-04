@@ -5,9 +5,8 @@
  * line next to the `en:` line. Anything without a `dz:` line shows in
  * English on the Dzongkha site until it is translated.
  *
- * TODO(committee): Dzongkha translation of this whole file. The voting and
- * verification wording (added in later phases) must be translated before
- * the election.
+ * TODO(committee): Dzongkha translation of this whole file (only needed if
+ * the Dzongkha site is switched back on).
  */
 
 import type { Localized } from "@/lib/i18n";
@@ -28,7 +27,6 @@ export const ui = {
     newToNz: L("New to NZ"),
     membership: L("Membership"),
     contact: L("Contact"),
-    elections: L("Elections"),
     donate: L("Donate"),
     news: L("News"),
     gallery: L("Gallery"),
@@ -132,56 +130,6 @@ export const ui = {
       callUs: L("Call us"),
       formTitle: L("Send a message"),
       responseNote: L("We are all volunteers. We aim to reply within a few days."),
-    },
-    elections: {
-      kicker: L("Election 2026"),
-      title: L("Electing our Executive Committee."),
-      lede: L("On Saturday 3 October 2026, members will elect the President, General Secretary and Treasurer in person, by secret ballot, on their own phones."),
-      facts: {
-        day: L("Polling day"),
-        offices: L("Offices"),
-        where: L("Where"),
-        hours: L("Voting hours"),
-        tba: L("To be announced"),
-      },
-      timeline: L("Timeline"),
-      done: L("Done"),
-      today: L("Today"),
-      howTitle: L("How to vote"),
-      howLede: L("Voting takes place in person. It takes about five minutes."),
-      steps: [
-        { title: L("Bring your passport"), text: L("Come to the venue with your Bhutanese passport. An expired passport is fine.") },
-        { title: L("Register at the desk"), text: L("An officer checks your passport by eye and ticks your name. Nothing is copied, photographed or written down from it.") },
-        { title: L("Take a voting code"), text: L("You are handed a printed slip from a shuffled pile. Nobody records which slip went to whom.") },
-        { title: L("Vote on your phone"), text: L("Scan the QR code on the slip, choose one candidate — or abstain — for each office, then press and hold to cast your vote.") },
-      ],
-      noPhone: L("No smartphone? Tablets will be available at the venue. Ask at the desk."),
-      bring: L("What to bring"),
-      bringPhone: L("Your phone, charged, if you have one"),
-      secretTitle: L("Your vote is secret"),
-      secret: [
-        L("The registration desk records that you attended. It never records which code you were given."),
-        L("Codes are printed in advance and shuffled by hand, so no one can link a code to a person."),
-        L("Votes are stored with no name, no code and no time — only your three choices."),
-        L("You receive a receipt code that proves your vote was counted, without revealing how you voted — to anyone."),
-      ],
-      candidatesTitle: L("The candidates"),
-      candidatesCta: L("See the candidates"),
-      questions: L("Questions about the election"),
-      questionsText: L("Contact the Election Coordination Team through our contact page."),
-      results: L("Results"),
-    },
-    candidates: {
-      kicker: L("Election 2026"),
-      title: L("The candidates"),
-      lede: L("Candidates for President, General Secretary and Treasurer, as verified by the Election Coordination Team."),
-      pending: L("The final list of candidates will be published here once it has been verified by the Election Coordination Team."),
-      noneForOffice: L("No candidates have been announced for this office yet."),
-      uncontested: L("Uncontested"),
-      readStatement: L("Read statement"),
-      office: L("Office"),
-      abstain: L("On the ballot, you can also choose to abstain for any office."),
-      backToElection: L("How to vote"),
     },
     executive: {
       kicker: L("Executive Members"),

@@ -12,9 +12,6 @@ import { ButtonLink, Container, NumberedList, SectionHeading, T } from "@/compon
 import signingPhoto from "@/public/images/committee-signing.jpg";
 import templePhoto from "@/public/images/temple-gathering.jpg";
 
-// Re-render daily so upcoming events move on without a redeploy.
-export const revalidate = 86400;
-
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();

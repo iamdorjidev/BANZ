@@ -11,7 +11,6 @@ const primaryNav = [
   { path: "/events", label: ui.nav.events },
   { path: "/community", label: ui.nav.community },
   { path: "/new-to-nz", label: ui.nav.newToNz },
-  { path: "/elections", label: ui.nav.elections },
   { path: "/contact", label: ui.nav.contact },
 ];
 

@@ -21,6 +21,30 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+
+  /*
+   * Pages live under app/[lang]/ but the site is English only, so visitors
+   * see clean URLs: /about is served from /en/about. Old /en/… and /dz/…
+   * links redirect to the clean URL. (Standard rewrites — no middleware.)
+   */
+  async redirects() {
+    return [
+      { source: "/:lang(en|dz)", destination: "/", permanent: true },
+      { source: "/:lang(en|dz)/:path*", destination: "/:path*", permanent: true },
+    ];
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [],
+      // After real files and fixed routes, before the dynamic [lang] route.
+      afterFiles: [
+        { source: "/", destination: "/en" },
+        // Any path that is not a file (no extension) gets the /en prefix.
+        { source: "/:path((?!.*\\.[a-zA-Z0-9]+$).+)", destination: "/en/:path" },
+      ],
+      fallback: [],
+    };
+  },
 };
 
 export default nextConfig;

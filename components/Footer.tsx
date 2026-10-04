@@ -14,7 +14,6 @@ const explore = [
   { path: "/gallery", label: ui.nav.gallery },
   { path: "/community", label: ui.nav.community },
   { path: "/new-to-nz", label: ui.nav.newToNz },
-  { path: "/elections", label: ui.nav.elections },
   { path: "/membership", label: ui.nav.membership },
   { path: "/donate", label: ui.nav.donate },
 ];

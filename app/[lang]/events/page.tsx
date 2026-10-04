@@ -13,9 +13,6 @@ export const metadata: Metadata = {
   description: "Upcoming and past gatherings of the Bhutanese community in New Zealand.",
 };
 
-// Re-render daily so events move from upcoming to past on their own.
-export const revalidate = 86400;
-
 export default async function EventsPage({ params }: PageProps<"/[lang]/events">) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();

@@ -8,7 +8,7 @@ import { Container, PageHeader, T } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "What personal information we keep, why, and for how long — including how passports and votes are handled.",
+  description: "What personal information we keep, why, and for how long.",
 };
 
 export default async function PrivacyPage({ params }: PageProps<"/[lang]/privacy">) {

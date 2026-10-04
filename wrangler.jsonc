@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Must match the Worker name in the Cloudflare dashboard.
+  "name": "banz",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      // Self-reference, used by the adapter for caching. Must match "name".
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "banz"
+    }
+  ],
+  "images": {
+    // Next.js image optimisation (AVIF/WebP, resized per screen) via Cloudflare Images.
+    "binding": "IMAGES"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
