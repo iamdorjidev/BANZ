@@ -1,26 +1,249 @@
 @import "tailwindcss";
 
+/*
+ * BANZ design tokens — taken from the Association's seal:
+ *   maroon ring  #6a1f27    dragon orange  #cd7229 / #ef9d4b
+ *   lotus gold   #f8c457    cream lettering on a warm cream page
+ *
+ * Contrast rules:
+ *   --saffron and --gold are fills and text on MAROON or dark photos only.
+ *   On cream, orange text uses --saffron-ink (5.5:1).
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cream: #fbf4e8;
+  --sand: #f3e4c8;
+  --peach: #fad9b4;
+  --ink: #24130f;
+  --ink-soft: #5b463e;
+  --heading: #6a1f27;
+  --maroon: #6a1f27;
+  --maroon-deep: #45121a;
+  --saffron: #ef9d4b;
+  --saffron-ink: #9a4f12;
+  --gold: #f8c457;
+  --line: #e3cfae;
+  --image-grade: saturate(0.92) contrast(1.03);
+  /* Tibetan script falls back to built-in system fonts on every platform. */
+  --font-tibetan: "Noto Serif Tibetan", "Noto Sans Tibetan", Kailasa, "Microsoft Himalaya", Jomolhari;
+
+  /* Always light: the site has no dark version. */
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: var(--cream);
+  --color-sand: var(--sand);
+  --color-peach: var(--peach);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-heading: var(--heading);
+  --color-maroon: var(--maroon);
+  --color-maroon-deep: var(--maroon-deep);
+  --color-saffron: var(--saffron);
+  --color-saffron-ink: var(--saffron-ink);
+  --color-gold: var(--gold);
+  --color-line: var(--line);
+  --color-on-dark: #fbf4e8;
+
+  --font-display: var(--font-newsreader), var(--font-tibetan), Georgia, serif;
+  --font-sans: var(--font-public-sans), var(--font-tibetan), system-ui, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  /* Keep in-page links (e.g. /community#welfare) clear of the sticky header. */
+  scroll-padding-top: 7rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  line-height: 1.7;
 }
+
+/* Dzongkha: stacked Tibetan script needs more vertical room. */
+:lang(dz) {
+  line-height: 1.9;
+}
+:lang(dz) :is(h1, h2, h3, .display) {
+  font-family: var(--font-tibetan), var(--font-newsreader), serif;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+p, li, dd {
+  text-wrap: pretty;
+}
+
+@layer components {
+  .h1 {
+    font-size: clamp(2.75rem, 7vw, 5.75rem);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+  .h2 {
+    font-size: clamp(2.125rem, 4.5vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+  }
+  .h3 {
+    font-size: 1.625rem;
+    line-height: 1.2;
+  }
+  /* Short label above a heading. Plain, not letter-spaced capitals. */
+  .kicker {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--saffron-ink);
+  }
+  .measure {
+    max-width: 66ch;
+  }
+  .lede {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Consistent grade so every photograph reads as one set. */
+  .graded {
+    filter: var(--image-grade);
+  }
+
+  /* Ring around circular portraits: a cream gap, then a saffron band. */
+  .photo-ring {
+    border-radius: 999px;
+    box-shadow:
+      0 0 0 5px var(--cream),
+      0 0 0 11px var(--saffron);
+  }
+
+  .prose-link {
+    color: var(--saffron-ink);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+  .prose-link:hover {
+    color: var(--heading);
+  }
+}
+
+/* Visible focus rings everywhere. */
+:focus-visible {
+  outline: 3px solid var(--saffron);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  background: var(--maroon);
+  color: #fbf4e8;
+  padding: 0.75rem 1.25rem;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Slow drift on the hero photograph, desktop only (saves battery on phones). */
+@keyframes drift {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+@media (min-width: 1024px) {
+  .drift {
+    animation: drift 20s var(--ease-out-soft) forwards;
+  }
+}
+
+/* Gentle rise-in for hero text. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise 900ms var(--ease-out-soft) both;
+}
+.rise-2 { animation-delay: 150ms; }
+.rise-3 { animation-delay: 300ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .drift { animation: none; }
+}
+
+/* Smooth accordion for candidate statements, where the browser supports it. */
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+  details.statement::details-content {
+    height: 0;
+    overflow: clip;
+    transition: height 400ms var(--ease-out-soft), content-visibility 400ms allow-discrete;
+  }
+  details.statement[open]::details-content {
+    height: auto;
+  }
+}
+
+/* Printing (code slips, attendance roll, results). */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+@media print {
+  body { background: #fff; }
+  .print-sheet { min-height: auto; }
+}
+
+/* ---------------------------------------------------------------------------
+   Voting app motion. All of it becomes a simple fade with reduced motion.
+   ------------------------------------------------------------------------- */
+@keyframes vote-in {
+  from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 48px)); }
+  to { opacity: 1; transform: none; }
+}
+.vote-screen { animation: vote-in 500ms var(--ease, ease-out) both; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-up { animation: fade-up 1200ms var(--ease-out-soft) both; }
+
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.draw-line { stroke-dasharray: 1; animation: draw 6s ease-in-out both; }
+.check-draw { stroke-dasharray: 1; animation: draw 400ms ease-out both; }
+.circle-draw { stroke-dasharray: 1; animation: draw 2s var(--ease-out-soft) both; }
+
+@keyframes sweep { from { transform: translateY(-50%) scaleX(0); } to { transform: translateY(-50%) scaleX(1); } }
+.sweep { transform-origin: left; animation: sweep 600ms var(--ease-out-soft) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vote-screen, .fade-up { animation: fade-plain 300ms ease both !important; }
+  .draw-line, .check-draw, .circle-draw, .sweep { animation: none !important; stroke-dashoffset: 0; transform: translateY(-50%); }
+}
+@keyframes fade-plain { from { opacity: 0; } to { opacity: 1; } }
