@@ -19,15 +19,16 @@ export const privacy = {
     {
       title: { en: "Membership applications and messages" },
       body: [
-        { en: "When you apply to join or send us a message, your name, email address, and the details you choose to give are emailed to the committee. They are used only to manage your membership or to reply to you." },
-        { en: "The website itself does not keep a database of visitors or members." },
+        { en: "When you register as a member, your name, email address, town or city, and your phone number if you choose to give it are saved in the Association's member register. Only committee members who sign in can see it. We email you a confirmation, and tell the committee you have joined." },
+        { en: "When you send us a message, your name, email address and message are emailed to the committee, and used only to reply to you." },
+        { en: "We never sell or share the member register." },
       ],
     },
     {
       title: { en: "How long we keep things" },
       body: [
         // TODO(committee): confirm this period.
-        { en: "Membership details: while you are a member, and removed within 3 months of you leaving." },
+        { en: "Membership details: while you are a member, and removed within 3 months of you leaving, or sooner if you ask." },
         { en: "Messages: as long as needed to reply and follow up, then deleted." },
       ],
     },

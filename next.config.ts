@@ -1,4 +1,9 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+// Lets `next dev` use the same Cloudflare bindings (the members database)
+// as production, backed by a local copy in .wrangler/.
+if (process.env.NODE_ENV === "development") initOpenNextCloudflareForDev();
 
 const securityHeaders = [
   // HTTPS only. Browsers remember this for two years.

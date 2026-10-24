@@ -64,16 +64,14 @@ npm run build      # production build
 ```
 
 - Next.js 16 (App Router), TypeScript, Tailwind CSS 4.
-- **Languages:** English at clean URLs (`/about`), Dzongkha under `/dz`
-  (`/dz/about`). `proxy.ts` remembers the visitor's choice in a cookie.
-  All pages live under `app/[lang]/`.
+- **Language:** English only. Pages live under `app/[lang]/` and `next.config.ts` rewrites
+  clean URLs (`/about`) to them; old `/en/…` and `/dz/…` links redirect.
 - **Design tokens** are in `app/globals.css`. `--ochre` is never used for text
   (3.8:1); use `--ochre-ink` (5.9:1).
-- **Forms** (contact, membership) send email through Resend. Set
-  `RESEND_API_KEY`, `MAIL_FROM` and `MAIL_TO`. Without them, forms tell the
-  visitor to email directly instead of silently dropping messages.
-- **Placeholders** show when `NODE_ENV !== "production"`, on Vercel preview
-  deployments, or with `SHOW_DRAFTS=1`.
+- **Forms** (contact, membership) send email through Resend — see "Member register"
+  below. Without the settings, the contact form tells the visitor to email directly
+  instead of silently dropping the message.
+- **Placeholders** (`draft: true`) show in development and preview, and are hidden on the live site (set `SHOW_DRAFTS=1` to show them).
 - Lighthouse (mobile, throttled): 97–100 in all four categories on every
   Phase 1 page. The Newsreader font is loaded roman-only without its
   optical-size axis to keep the headline fast on slow connections — keep it
@@ -104,7 +102,32 @@ Because pages are pre-built, **edits to `/content` go live on the next deploy**
 
 - Preview the Workers build locally: `npm run preview` (or `npm run build` then `npx wrangler dev`).
 - Images are optimised by Cloudflare Images through the `IMAGES` binding.
-- To enable the contact and membership forms, add `RESEND_API_KEY`, `MAIL_FROM`
-  and `MAIL_TO` under the Worker's Settings → Variables and Secrets.
 - `wrangler.jsonc` → `name` must match the Worker name in the dashboard (`banz`).
 
+### Member register and confirmation emails
+
+People who register on `/membership` are saved in a Cloudflare **D1** database
+(binding `DB`, database `banz-members`). Cloudflare creates it automatically the
+first time the Worker deploys, and the table is created on first use.
+
+**Committee area:** `/admin` — sign in to see every registered member (number,
+name, email, phone, town or city, when they registered, and whether their
+confirmation email went out), search them, download them all as a spreadsheet
+(CSV), or remove someone. Nothing is public.
+
+**Settings** — add under the Worker's *Settings → Variables and Secrets*:
+
+| Name | What it is |
+|---|---|
+| `ADMIN_PASSWORD` | Password for the committee area (secret) |
+| `SESSION_SECRET` | 32+ random characters that keep sign-ins secure (secret) |
+| `RESEND_API_KEY` | API key from resend.com (secret) — sends the emails |
+| `MAIL_FROM` | Sender, e.g. `BANZ <hello@banz.org.nz>` — the domain must be verified in Resend |
+| `MAIL_TO` | Committee inbox for "new member" and contact-form emails (comma-separate several) |
+
+When someone registers they get a confirmation email with their member number
+(BANZ-0001, …) and the committee is told. If the email cannot be sent, the
+registration is still saved and the admin list shows "Not sent".
+
+Local testing: put `ADMIN_PASSWORD` and `SESSION_SECRET` in `.dev.vars`
+(never committed), then `npm run dev` — it uses a local copy of the database.

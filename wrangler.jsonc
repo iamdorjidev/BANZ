@@ -16,6 +16,14 @@
       "service": "banz"
     }
   ],
+  "d1_databases": [
+    {
+      // The member register. Cloudflare creates this database automatically
+      // the first time the Worker is deployed; the table is created on first use.
+      "binding": "DB",
+      "database_name": "banz-members"
+    }
+  ],
   "images": {
     // Next.js image optimisation (AVIF/WebP, resized per screen) via Cloudflare Images.
     "binding": "IMAGES"

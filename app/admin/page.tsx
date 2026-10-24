@@ -1,0 +1,99 @@
+import { requireAdmin } from "@/lib/admin-auth";
+import { listMembers, memberNumber } from "@/lib/members";
+import { deleteMember } from "./actions";
+
+const nz = (utc: string) =>
+  new Date(utc.replace(" ", "T") + "Z").toLocaleString("en-NZ", {
+    timeZone: "Pacific/Auckland",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
+  await requireAdmin();
+  const { q } = await searchParams;
+  const query = typeof q === "string" ? q : "";
+  const { members, total, connected } = await listMembers(query);
+
+  return (
+    <div>
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <p className="kicker">Registered members</p>
+          <h1 className="font-display text-[4rem] leading-none text-heading tabular-nums">{total}</h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <form className="flex gap-2">
+            <label htmlFor="q" className="sr-only">Search members</label>
+            <input
+              id="q"
+              name="q"
+              defaultValue={query}
+              placeholder="Search members"
+              className="w-72 max-w-full rounded-full border border-ink-soft bg-cream px-5 py-3"
+            />
+            <button className="rounded-full border-[1.5px] border-maroon px-5 font-semibold text-heading hover:bg-maroon hover:text-on-dark">Search</button>
+          </form>
+          {/* A file download from a route handler, not a page — a plain link is correct. */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a href="/admin/export" className="rounded-full bg-maroon px-5 py-3 font-semibold text-on-dark hover:bg-maroon-deep">
+            Download CSV
+          </a>
+        </div>
+      </div>
+
+      {!connected && (
+        <p className="mt-10 rounded-2xl bg-sand p-6 font-semibold text-heading">
+          The members database is not connected yet. On Cloudflare it is added automatically as the “DB” binding (see the README).
+        </p>
+      )}
+
+      {connected && members.length === 0 && (
+        <p className="mt-10 text-[1.25rem] text-ink-soft">
+          {query ? `No members match “${query}”.` : "Nobody has registered yet. New members appear here as soon as they sign up."}
+        </p>
+      )}
+
+      {members.length > 0 && (
+        <div className="mt-10 overflow-x-auto">
+          <table className="w-full min-w-[760px] text-left text-[1rem]">
+            <thead>
+              <tr className="border-b border-ink-soft">
+                <th className="py-3 pr-4">No.</th>
+                <th className="py-3 pr-4">Name</th>
+                <th className="py-3 pr-4">Email</th>
+                <th className="py-3 pr-4">Phone</th>
+                <th className="py-3 pr-4">Town or city</th>
+                <th className="py-3 pr-4">Registered (NZ)</th>
+                <th className="py-3 pr-4">Confirmation</th>
+                <th className="py-3"><span className="sr-only">Remove</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((m) => (
+                <tr key={m.id} className="border-b border-line align-top">
+                  <td className="py-3 pr-4 font-mono text-[0.9375rem]">{memberNumber(m.id)}</td>
+                  <td className="py-3 pr-4 font-semibold text-heading">{m.name}</td>
+                  <td className="py-3 pr-4"><a href={`mailto:${m.email}`} className="prose-link">{m.email}</a></td>
+                  <td className="py-3 pr-4">{m.phone ? <a href={`tel:${m.phone}`}>{m.phone}</a> : "—"}</td>
+                  <td className="py-3 pr-4">{m.city}</td>
+                  <td className="py-3 pr-4 whitespace-nowrap text-ink-soft">{nz(m.registered_at)}</td>
+                  <td className="py-3 pr-4">{m.email_sent ? "Emailed" : "Not sent"}</td>
+                  <td className="py-3 text-right">
+                    <form action={deleteMember}>
+                      <input type="hidden" name="id" value={m.id} />
+                      <button className="text-[0.9375rem] text-ink-soft underline hover:text-heading" aria-label={`Remove ${m.name}`}>Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}

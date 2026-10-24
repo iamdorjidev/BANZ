@@ -30,14 +30,33 @@ export type ExecutiveTerm = {
 
 export const executiveTerms: ExecutiveTerm[] = [
   {
+    // Elected 3 October 2026.
+    // TODO(committee): confirm the term end year, and add a portrait for each member.
+    years: "2026 – present",
+    label: { en: "Executive Committee" },
+    members: [
+      { name: "Dr. Jamba Tobden", role: { en: "President" } },
+      { name: "Mr. Galey Nima", role: { en: "General Secretary" } },
+      { name: "Mr. Tandin Tshewang", role: { en: "Treasurer" } },
+      { name: "Mr. Thinley Dorji", role: { en: "Communications Officer" } },
+      { name: "Mr. Sonam Gyaltshen", role: { en: "Religious and Special Envoy to Kunjung" } },
+      { name: "Mr. Mipham Chogyel", role: { en: "Sports Officer" } },
+      { name: "Mr. Nado", role: { en: "Cultural Officer" } },
+      { name: "Mr. Phub Tshering", role: { en: "Welfare Officer" } },
+      { name: "Dr. Tashi Wangchuk", role: { en: "Data and Employment Officer" } },
+    ],
+  },
+  {
     years: "2025 – 2026",
     label: { en: "Founding Executive" },
-    // Founding executive, appointed 23 August 2025.
-    // TODO(committee): add a portrait for each member.
     members: [
-      { name: "Tashi Wangdi", role: { en: "President" } },
-      { name: "Yeshey Rangdol", role: { en: "General Secretary" } },
-      { name: "Sonam Zangmo", role: { en: "Treasurer" } },
+      { name: "Mr. Tashi Wangdi", role: { en: "President" } },
+      { name: "Mr. Yeshey Rangdol", role: { en: "General Secretary" } },
+      { name: "Mrs. Sonam Zangmo", role: { en: "Treasurer" } },
+      { name: "Mr. Tashi Wangda", role: { en: "Event Coordinator (Cultural & Sports" } },
+      { name: "Mrs. Kencho Dem", role: { en: "Youth Representative" }},
+      { name: "Mr. Namgay Tshering", role: { en: "Religious Coordinator" } },
+      { name: "Mr. Yeshi Wangdi", role: { en: "community relationship manager" } },
     ],
   },
 ];

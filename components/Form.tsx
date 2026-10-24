@@ -35,11 +35,19 @@ export function Form({
   const [state, formAction, pending] = useActionState(action, { status: "idle" });
   const id = useId();
 
-  if (state.status === "sent") {
+  if (state.status === "sent" || state.status === "registered" || state.status === "registered-no-email") {
     return (
-      <p role="status" className="font-display text-[1.75rem] leading-snug text-heading">
-        {tr(success, lang)}
-      </p>
+      <div role="status">
+        <p className="font-display text-[1.75rem] leading-snug text-heading">{tr(success, lang)}</p>
+        {state.memberNo && (
+          <p className="mt-4 text-[1.125rem]">
+            {tr(ui.forms.memberNo, lang)}: <strong className="text-heading">{state.memberNo}</strong>
+          </p>
+        )}
+        {state.status === "registered-no-email" && (
+          <p className="mt-3 text-ink-soft">{tr(ui.forms.noConfirmation, lang)}</p>
+        )}
+      </div>
     );
   }
 
@@ -88,6 +96,9 @@ export function Form({
       </div>
 
       <div role="status" aria-live="polite">
+        {state.status === "duplicate" && (
+          <p className="font-semibold text-heading">{tr(ui.forms.duplicate, lang)}</p>
+        )}
         {(state.status === "not-configured" || state.status === "error") && (
           <p className="font-semibold text-heading">
             {tr(state.status === "error" ? ui.forms.error : ui.forms.notConnected, lang)}{" "}
