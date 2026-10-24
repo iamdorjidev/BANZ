@@ -4,6 +4,7 @@ import { ui } from "@/content/ui";
 import { buttonOutline, buttonPrimary, Container, T } from "./ui";
 import { Seal } from "./Mark";
 import { HeaderShell, NavLinks } from "./NavLinks";
+import { MobileMenu } from "./MobileMenu";
 
 const primaryNav = [
   { path: "/about", label: ui.nav.about },
@@ -52,43 +53,25 @@ export function Header({ lang }: { lang: Locale }) {
           </div>
         </nav>
 
-        {/* Mobile menu: <details> works without JavaScript on any phone. */}
-        <details className="group xl:hidden">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 rounded-full border-[1.5px] border-maroon px-5 text-[0.9375rem] font-semibold text-heading [&::-webkit-details-marker]:hidden">
-            <span className="group-open:hidden">
-              <T t={ui.menu} lang={lang} />
-            </span>
-            <span className="hidden group-open:inline">
-              <T t={ui.close} lang={lang} />
-            </span>
-            <span aria-hidden className="flex w-5 flex-col gap-1.25">
-              <span className="h-0.5 rounded bg-maroon transition-transform group-open:translate-y-[3.5px] group-open:rotate-45" />
-              <span className="h-0.5 rounded bg-maroon transition-transform group-open:translate-y-[-3.5px] group-open:-rotate-45" />
-            </span>
-          </summary>
-          <nav
-            aria-label="Main"
-            className="absolute inset-x-0 top-full max-h-[calc(100svh-5rem)] overflow-y-auto bg-cream px-6 pt-12 pb-10 shadow-2xl"
-          >
-            <ul className="flex flex-col">
-              {primaryNav.map((item) => (
-                <li key={item.path} className="border-b border-line/70">
-                  <Link href={href(lang, item.path)} className="font-display block py-4 text-[1.625rem] text-heading">
-                    <T t={item.label} lang={lang} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={href(lang, "/membership")} className={buttonPrimary}>
-                <T t={ui.hero.join} lang={lang} />
-              </Link>
-              <Link href={href(lang, "/donate")} className={buttonOutline}>
-                <T t={ui.nav.donate} lang={lang} />
-              </Link>
-            </div>
-          </nav>
-        </details>
+        <MobileMenu openLabel={<T t={ui.menu} lang={lang} />} closeLabel={<T t={ui.close} lang={lang} />}>
+          <ul className="flex flex-col">
+            {primaryNav.map((item) => (
+              <li key={item.path} className="border-b border-line/70">
+                <Link href={href(lang, item.path)} className="font-display block py-4 text-[1.625rem] text-heading">
+                  <T t={item.label} lang={lang} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href={href(lang, "/membership")} className={buttonPrimary}>
+              <T t={ui.hero.join} lang={lang} />
+            </Link>
+            <Link href={href(lang, "/donate")} className={buttonOutline}>
+              <T t={ui.nav.donate} lang={lang} />
+            </Link>
+          </div>
+        </MobileMenu>
       </Container>
     </HeaderShell>
   );
