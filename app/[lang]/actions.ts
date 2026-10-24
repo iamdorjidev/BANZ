@@ -1,8 +1,8 @@
 "use server";
 
 import { sendMail, type SendResult } from "@/lib/mail";
-import { addMember, markEmailSent, memberNumber } from "@/lib/members";
-import { site } from "@/content/site";
+import { addMember, memberNumber } from "@/lib/members";
+import { sendWelcome } from "@/lib/welcome";
 
 export type FormState = {
   /** "registered" = saved and confirmation emailed; "registered-no-email" = saved, email not sent. */
@@ -66,30 +66,8 @@ export async function applyForMembership(_prev: FormState, data: FormData): Prom
 
   const memberNo = memberNumber(saved.id);
 
-  // Confirmation to the new member.
-  const confirmation = await sendMail({
-    to: values.email,
-    replyTo: site.email,
-    subject: `Welcome to the Bhutanese Association of New Zealand (${memberNo})`,
-    text: [
-      `Kuzuzangpo la ${values.name},`,
-      "",
-      "Thank you for registering as a member of the Bhutanese Association of New Zealand. We are glad to have you with us.",
-      "",
-      `Your member number: ${memberNo}`,
-      `Name: ${values.name}`,
-      `Email: ${values.email}`,
-      `Town or city: ${values.city}`,
-      "",
-      "A member of the committee will be in touch about gatherings and ways to get involved. If any of these details are wrong, just reply to this email.",
-      "",
-      "Tashi delek,",
-      site.name,
-      site.phone,
-      site.url,
-    ].join("\n"),
-  });
-  if (confirmation === "sent") await markEmailSent(saved.id);
+  // Confirmation to the new member (the result is saved, so the committee can see and resend it).
+  const confirmation = (await sendWelcome({ id: saved.id, name: values.name, email: values.email, city: values.city })).result;
 
   // Heads-up to the committee (the full list is always in the admin area).
   await sendMail({

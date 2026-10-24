@@ -12,16 +12,20 @@ import { envVar } from "./env";
  */
 export type SendResult = "sent" | "not-configured" | "error";
 
-export async function sendMail(opts: {
+export type Delivery = { result: SendResult; detail?: string };
+
+/** Like sendMail, but also says WHY it failed (safe to show the committee). */
+export async function deliver(opts: {
   subject: string;
   text: string;
   to?: string;
   replyTo?: string;
-}): Promise<SendResult> {
+}): Promise<Delivery> {
   const key = envVar("RESEND_API_KEY");
   const from = envVar("MAIL_FROM");
   const to = opts.to ?? envVar("MAIL_TO");
-  if (!key || !from || !to) return "not-configured";
+  const missing = [!key && "RESEND_API_KEY", !from && "MAIL_FROM", !to && "MAIL_TO"].filter(Boolean);
+  if (missing.length) return { result: "not-configured", detail: `Email is not set up yet — missing ${missing.join(", ")} in the Cloudflare settings.` };
 
   try {
     const res = await fetch(`${envVar("RESEND_API_URL") ?? "https://api.resend.com"}/emails`, {
@@ -29,19 +33,25 @@ export async function sendMail(opts: {
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         from,
-        to: to.split(",").map((s) => s.trim()),
+        to: to!.split(",").map((s) => s.trim()),
         subject: opts.subject,
         text: opts.text,
         reply_to: opts.replyTo,
       }),
     });
     if (!res.ok) {
+      // Resend explains the problem in plain words (e.g. "domain is not verified").
+      const body = (await res.json().catch(() => ({}))) as { message?: string };
       console.error(`[mail] send failed with status ${res.status}`);
-      return "error";
+      return { result: "error", detail: `Resend refused it (${res.status}): ${(body.message ?? "no reason given").slice(0, 240)}` };
     }
-    return "sent";
+    return { result: "sent" };
   } catch {
     console.error("[mail] send failed (network)");
-    return "error";
+    return { result: "error", detail: "Could not reach Resend (network problem)." };
   }
+}
+
+export async function sendMail(opts: { subject: string; text: string; to?: string; replyTo?: string }): Promise<SendResult> {
+  return (await deliver(opts)).result;
 }

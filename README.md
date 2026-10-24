@@ -131,3 +131,9 @@ registration is still saved and the admin list shows "Not sent".
 
 Local testing: put `ADMIN_PASSWORD` and `SESSION_SECRET` in `.dev.vars`
 (never committed), then `npm run dev` — it uses a local copy of the database.
+
+**If a member did not get their confirmation email:** open `/admin`. Members who
+were not emailed show **Not sent** with the exact reason (for example "missing
+RESEND_API_KEY", or Resend's own message such as "domain is not verified"). Fix
+the setting, then press **Send now** next to the member, or **Email the members
+not yet confirmed** to send to everyone waiting. The CSV download includes the reason too.

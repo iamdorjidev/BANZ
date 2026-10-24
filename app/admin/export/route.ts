@@ -12,11 +12,11 @@ export async function GET() {
     return `"${s.replace(/"/g, '""')}"`;
   };
   const rows = [
-    ["Member no.", "Name", "Email", "Phone", "Town or city", "Registered (UTC)", "Confirmation emailed"],
+    ["Member no.", "Name", "Email", "Phone", "Town or city", "Registered (UTC)", "Confirmation emailed", "Email problem"],
     ...members
       .slice()
       .reverse()
-      .map((m) => [memberNumber(m.id), m.name, m.email, m.phone, m.city, m.registered_at, m.email_sent ? "Yes" : "No"]),
+      .map((m) => [memberNumber(m.id), m.name, m.email, m.phone, m.city, m.registered_at, m.email_sent ? "Yes" : "No", m.email_note]),
   ];
   return new Response("﻿" + rows.map((r) => r.map(cell).join(",")).join("\r\n"), {
     headers: {

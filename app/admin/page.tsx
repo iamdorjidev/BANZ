@@ -1,6 +1,7 @@
 import { requireAdmin } from "@/lib/admin-auth";
 import { listMembers, memberNumber } from "@/lib/members";
 import { deleteMember } from "./actions";
+import { ResendAll, ResendOne } from "@/components/ResendButtons";
 
 const nz = (utc: string) =>
   new Date(utc.replace(" ", "T") + "Z").toLocaleString("en-NZ", {
@@ -45,6 +46,15 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
         </div>
       </div>
 
+      {connected && members.some((m) => !m.email_sent) && (
+        <div className="mt-8 rounded-2xl bg-sand p-6">
+          <p className="mb-4 font-semibold text-heading">
+            Some members have not received their confirmation email. The reason is shown under “Not sent”. Once it is fixed, send them below.
+          </p>
+          <ResendAll pending={members.filter((m) => !m.email_sent).length} />
+        </div>
+      )}
+
       {!connected && (
         <p className="mt-10 rounded-2xl bg-sand p-6 font-semibold text-heading">
           The members database is not connected yet. On Cloudflare it is added automatically as the “DB” binding (see the README).
@@ -81,7 +91,19 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
                   <td className="py-3 pr-4">{m.phone ? <a href={`tel:${m.phone}`}>{m.phone}</a> : "—"}</td>
                   <td className="py-3 pr-4">{m.city}</td>
                   <td className="py-3 pr-4 whitespace-nowrap text-ink-soft">{nz(m.registered_at)}</td>
-                  <td className="py-3 pr-4">{m.email_sent ? "Emailed" : "Not sent"}</td>
+                  <td className="py-3 pr-4">
+                    {m.email_sent ? (
+                      "Emailed"
+                    ) : (
+                      <>
+                        <strong className="text-heading">Not sent</strong>
+                        {m.email_note && <p className="mt-1 max-w-64 text-[0.8125rem] text-ink-soft">{m.email_note}</p>}
+                        <div className="mt-2">
+                          <ResendOne id={m.id} name={m.name} label="Send now" />
+                        </div>
+                      </>
+                    )}
+                  </td>
                   <td className="py-3 text-right">
                     <form action={deleteMember}>
                       <input type="hidden" name="id" value={m.id} />

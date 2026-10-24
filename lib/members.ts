@@ -9,6 +9,7 @@ export type Member = {
   city: string;
   registered_at: string; // UTC, "YYYY-MM-DD HH:MM:SS"
   email_sent: number;
+  email_note: string | null; // why the confirmation was not sent, if it was not
 };
 
 /** "BANZ-0042": the member number shown to the member and the committee. */
@@ -24,6 +25,8 @@ async function db(): Promise<D1Database | null> {
   const d = database();
   if (d && !ready.has(d)) {
     await d.prepare(CREATE).run();
+    // Added after the first version: older databases get the column once.
+    await d.prepare("ALTER TABLE members ADD COLUMN email_note TEXT").run().catch(() => {});
     ready.add(d);
   }
   return d;
@@ -47,9 +50,20 @@ export async function addMember(m: {
   return { status: "created", id: Number(res.meta.last_row_id) };
 }
 
-export async function markEmailSent(id: number) {
+export async function recordEmailResult(id: number, sent: boolean, note?: string) {
   const d = await db();
-  await d?.prepare("UPDATE members SET email_sent = 1 WHERE id = ?").bind(id).run();
+  await d?.prepare("UPDATE members SET email_sent = ?, email_note = ? WHERE id = ?").bind(sent ? 1 : 0, sent ? null : (note ?? null), id).run();
+}
+
+export async function getMember(id: number): Promise<Member | null> {
+  const d = await db();
+  return d ? await d.prepare("SELECT * FROM members WHERE id = ?").bind(id).first<Member>() : null;
+}
+
+export async function membersWithoutEmail(): Promise<Member[]> {
+  const d = await db();
+  if (!d) return [];
+  return (await d.prepare("SELECT * FROM members WHERE email_sent = 0 ORDER BY id").all<Member>()).results;
 }
 
 export async function listMembers(query = ""): Promise<{ members: Member[]; total: number; connected: boolean }> {

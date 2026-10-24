@@ -28,41 +28,13 @@ export type EventItem = {
 
 export const events: EventItem[] = [
   {
-    id: "khadar-2026",
-    title: { en: "Khadar for the newly elected Executive Committee" },
-    // TODO(committee): add the time and venue, and check the description below.
-    date: "2026-10-04",
+    id: "fourth-druk-gyalpo-birth-anniversary-2026",
+    title: { en: "Birth Anniversary of the Fourth Druk Gyalpo, His Majesty Jigme Singye Wangchuck" },
+    date: "2026-11-11",
+    // TODO(committee): add the time, the venue, and what is planned.
     venue: { en: "Venue to be announced, Auckland" },
     summary: {
-      en: "The community offers khadar to welcome the newly elected Executive Committee.",
+      en: "The community gathers to mark the Birth Anniversary of the Fourth Druk Gyalpo, His Majesty Jigme Singye Wangchuck — a day also celebrated as Constitution Day and National Happiness Day.",
     },
-  },
-  {
-    id: "losar-2027",
-    title: { en: "Losar celebration" },
-    // TODO(committee): replace with the real date once set.
-    date: "2027-02-06",
-    venue: { en: "Venue to be confirmed, Auckland" },
-    summary: {
-      en: "Welcoming the new year together with food, song and family.",
-    },
-    draft: true,
-  },
-  {
-    id: "founding-gathering",
-    title: { en: "Community gathering" },
-    // TODO(committee): this is the stage photograph in /public/images. Confirm its name and date.
-    date: "2025-11-11",
-    venue: { en: "Auckland" },
-    summary: {
-      en: "One of the first large gatherings of the Bhutanese community in Auckland.",
-    },
-    photos: [
-      {
-        src: "/images/community-gathering.jpg",
-        alt: { en: "The Bhutanese community in Auckland gathered on stage, many in gho and kira." },
-      },
-    ],
-    draft: true,
-  },
+  }
 ];
