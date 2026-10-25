@@ -68,6 +68,13 @@ export const ui = {
 
   forms: {
     name: L("Full name"),
+    memberId: L("Member ID"),
+    memberIdNote: L("Assigned automatically — you cannot change it. Your final number is confirmed once you apply."),
+    firstName: L("First name"),
+    lastName: L("Last name"),
+    dob: L("Date of birth"),
+    idDocument: L("Identity document"),
+    choose: L("Select…"),
     email: L("Email"),
     phone: L("Phone (optional)"),
     city: L("Home address"),

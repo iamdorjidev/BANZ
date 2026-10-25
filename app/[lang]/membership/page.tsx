@@ -5,6 +5,7 @@ import { isLocale } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { membership } from "@/content/membership";
 import { applyForMembership } from "../actions";
+import { idDocuments, memberNumber, nextMemberId } from "@/lib/members";
 import { Form } from "@/components/Form";
 import { Container, Kicker, NumberedList, PageHeader, T } from "@/components/ui";
 import headerPhoto from "@/public/images/temple-gathering.jpg";
@@ -14,10 +15,15 @@ export const metadata: Metadata = {
   description: "Join the Bhutanese Association of New Zealand.",
 };
 
+// The Member ID shown on the form comes from the database, so this page is never cached.
+export const dynamic = "force-dynamic";
+
 export default async function MembershipPage({ params }: PageProps<"/[lang]/membership">) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const t = ui.pages.membership;
+  const nextNo = memberNumber(await nextMemberId());
+  const today = new Date().toISOString().slice(0, 10);
 
   return (
     <>
@@ -73,9 +79,13 @@ export default async function MembershipPage({ params }: PageProps<"/[lang]/memb
               submit={ui.forms.apply}
               success={ui.forms.applied}
               fields={[
-                { name: "name", label: ui.forms.name, required: true, autoComplete: "name" },
+                { name: "member_id", label: ui.forms.memberId, fixed: nextNo, note: ui.forms.memberIdNote },
+                { name: "first_name", label: ui.forms.firstName, required: true, autoComplete: "given-name" },
+                { name: "last_name", label: ui.forms.lastName, required: true, autoComplete: "family-name" },
                 { name: "email", label: ui.forms.email, type: "email", required: true, autoComplete: "email" },
                 { name: "phone", label: ui.forms.phone, type: "tel", autoComplete: "tel" },
+                { name: "dob", label: ui.forms.dob, type: "date", required: true, autoComplete: "bday", max: today },
+                { name: "id_document", label: ui.forms.idDocument, type: "select", required: true, options: idDocuments },
                 { name: "city", label: ui.forms.city, required: true, autoComplete: "street-address", suggest: nzPlaces },
               ]}
             />

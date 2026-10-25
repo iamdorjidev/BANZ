@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { adminConfigured, endAdminSession, passwordOk, requireAdmin, startAdminSession } from "@/lib/admin-auth";
-import { getMember, membersWithoutEmail, removeMember } from "@/lib/members";
+import { getMember, membersWithoutEmail, removeMember, removeMessage } from "@/lib/members";
 import { sendWelcome } from "@/lib/welcome";
 
 export type LoginState = { error?: string; name?: string };
@@ -26,7 +26,7 @@ export async function deleteMember(form: FormData) {
   await requireAdmin();
   const id = Number(form.get("id"));
   if (Number.isInteger(id) && id > 0) await removeMember(id);
-  revalidatePath("/admin");
+  revalidatePath("/admin", "layout");
 }
 
 export type ResendState = { message?: string; error?: string };
@@ -37,7 +37,7 @@ export async function resendOne(_prev: ResendState, form: FormData): Promise<Res
   const m = await getMember(Number(form.get("id")));
   if (!m) return { error: "Member not found." };
   const out = await sendWelcome(m);
-  revalidatePath("/admin");
+  revalidatePath("/admin", "layout");
   return out.result === "sent" ? { message: `Sent to ${m.email}.` } : { error: out.detail };
 }
 
@@ -55,8 +55,15 @@ export async function resendAll(): Promise<ResendState> {
       break; // the same problem would hit everyone — stop and report it
     }
   }
-  revalidatePath("/admin");
+  revalidatePath("/admin", "layout");
   return firstError
     ? { error: `${sent} sent. Stopped because: ${firstError}` }
     : { message: pending.length ? `${sent} confirmation emails sent.` : "Everyone has already been emailed." };
+}
+
+export async function deleteMessage(form: FormData) {
+  await requireAdmin();
+  const id = Number(form.get("id"));
+  if (Number.isInteger(id) && id > 0) await removeMessage(id);
+  revalidatePath("/admin", "layout");
 }

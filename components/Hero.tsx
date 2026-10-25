@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { href, tr, type Locale } from "@/lib/i18n";
-import { heroImage, site } from "@/content/site";
+import { heroImage } from "@/content/site";
 import { ui } from "@/content/ui";
 import { ButtonLink, Container, Kicker, T } from "./ui";
 

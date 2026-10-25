@@ -5,13 +5,17 @@ import type { FormState } from "@/app/[lang]/actions";
 import { tr, type Locale, type Localized } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
-import { nzPlaces } from "@/lib/nz-places";
 import { buttonMaroon } from "./ui";
 
 type Field = {
   name: string;
   label: Localized;
-  type?: "text" | "email" | "tel" | "textarea";
+  type?: "text" | "email" | "tel" | "textarea" | "date" | "select";
+  options?: readonly string[];
+  /** Shown but not editable or submitted (e.g. the Member ID). */
+  fixed?: string;
+  note?: Localized;
+  max?: string;
   suggest?: string[];
   required?: boolean;
   autoComplete?: string;
@@ -194,14 +198,32 @@ export function Form({
             <label htmlFor={fid} className="block text-[1rem] font-medium">
               {tr(f.label, lang)}
             </label>
-            {f.type === "textarea" ? (
+            {f.fixed !== undefined ? (
+              <>
+                <input id={fid} readOnly value={f.fixed} aria-describedby={`${fid}-note`} className={`${input} cursor-not-allowed bg-sand font-semibold text-heading`} />
+                {f.note && (
+                  <p id={`${fid}-note`} className="mt-2 text-[0.9375rem] text-ink-soft">
+                    {tr(f.note, lang)}
+                  </p>
+                )}
+              </>
+            ) : f.type === "select" ? (
+              <select {...common} defaultValue={common.defaultValue} className={`${input} appearance-auto`}>
+                <option value="">{tr(ui.forms.choose, lang)}</option>
+                {f.options?.map((o) => (
+                  <option key={o} value={o}>
+                    {o}
+                  </option>
+                ))}
+              </select>
+            ) : f.type === "textarea" ? (
               <textarea {...common} rows={6} />
             ) : f.suggest ? (
               <SuggestInput {...common} defaultValue={common.defaultValue} suggestions={f.suggest} />
             ) : (
-              <input {...common} type={f.type ?? "text"} />
+              <input {...common} type={f.type ?? "text"} max={f.max} />
             )}
-            {invalid && (
+            {f.fixed === undefined && invalid && (
               <p id={`${fid}-err`} className="mt-2 text-[1rem] font-semibold text-heading">
                 {tr(ui.forms.required, lang)}
               </p>

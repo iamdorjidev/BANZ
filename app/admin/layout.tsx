@@ -25,6 +25,13 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
               <span className="font-display text-[1.25rem] text-heading">Member register</span>
             </Link>
             <nav className="flex items-center gap-3 text-[0.9375rem] font-medium">
+              {name && (
+                <>
+                  <Link href="/admin" className="rounded-full px-3 py-2 hover:bg-sand">Overview</Link>
+                  <Link href="/admin/members" className="rounded-full px-3 py-2 hover:bg-sand">Members</Link>
+                  <Link href="/admin/messages" className="rounded-full px-3 py-2 hover:bg-sand">Messages</Link>
+                </>
+              )}
               <Link href="/" className="rounded-full px-3 py-2 hover:bg-sand">View website</Link>
               {name && (
                 <form action={logout} className="flex items-center gap-2 border-l border-line pl-3">
