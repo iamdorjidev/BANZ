@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { nzPlaces } from "@/lib/nz-places";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n";
 import { ui } from "@/content/ui";
@@ -75,7 +76,7 @@ export default async function MembershipPage({ params }: PageProps<"/[lang]/memb
                 { name: "name", label: ui.forms.name, required: true, autoComplete: "name" },
                 { name: "email", label: ui.forms.email, type: "email", required: true, autoComplete: "email" },
                 { name: "phone", label: ui.forms.phone, type: "tel", autoComplete: "tel" },
-                { name: "city", label: ui.forms.city, required: true, autoComplete: "address-level2" },
+                { name: "city", label: ui.forms.city, required: true, autoComplete: "street-address", suggest: nzPlaces },
               ]}
             />
             <Kicker className="mt-10 font-normal! text-ink-soft!">

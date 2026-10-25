@@ -12,7 +12,7 @@ export async function GET() {
     return `"${s.replace(/"/g, '""')}"`;
   };
   const rows = [
-    ["Member no.", "Name", "Email", "Phone", "Town or city", "Registered (UTC)", "Confirmation emailed", "Email problem"],
+    ["Member no.", "Name", "Email", "Phone", "Home address", "Registered (UTC)", "Confirmation emailed", "Email problem"],
     ...members
       .slice()
       .reverse()

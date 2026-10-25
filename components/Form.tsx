@@ -1,19 +1,139 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { useActionState, useEffect, useId, useState } from "react";
 import type { FormState } from "@/app/[lang]/actions";
 import { tr, type Locale, type Localized } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
+import { nzPlaces } from "@/lib/nz-places";
 import { buttonMaroon } from "./ui";
 
 type Field = {
   name: string;
   label: Localized;
   type?: "text" | "email" | "tel" | "textarea";
+  suggest?: string[];
   required?: boolean;
   autoComplete?: string;
 };
+
+/** Text input that suggests matches as people type; anything typed is still accepted. */
+function SuggestInput({
+  suggestions,
+  defaultValue,
+  ...props
+}: { suggestions: string[]; defaultValue: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+  const [value, setValue] = useState(defaultValue);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(-1);
+  const q = value.trim().toLowerCase();
+  const [remote, setRemote] = useState<string[]>([]);
+
+  // Live NZ place search (Photon / OpenStreetMap); the built-in list is the fallback.
+  useEffect(() => {
+    if (q.length < 3) return;
+    const ctrl = new AbortController();
+    const t = setTimeout(async () => {
+      try {
+        const r = await fetch(
+          `https://photon.komoot.io/api/?q=${encodeURIComponent(value.trim())}&limit=8&lang=en&bbox=166,-47.5,178.7,-34`,
+          { signal: ctrl.signal },
+        );
+        const data = await r.json();
+        const names = (data.features ?? [])
+          .filter((f: { properties: { countrycode?: string } }) => f.properties.countrycode === "NZ")
+          .map((f: { properties: { name?: string; housenumber?: string; street?: string; district?: string; locality?: string; city?: string; postcode?: string } }) => {
+            const p = f.properties;
+            const street = p.street ? `${p.housenumber ? `${p.housenumber} ` : ""}${p.street}` : p.name;
+            return [street, p.district ?? p.locality, p.city, p.postcode]
+              .filter((v, i, arr) => v && arr.indexOf(v) === i)
+              .join(", ");
+          })
+          .filter(Boolean);
+        setRemote([...new Set<string>(names)]);
+      } catch {
+        /* offline or blocked: keep local suggestions */
+      }
+    }, 250);
+    return () => {
+      clearTimeout(t);
+      ctrl.abort();
+    };
+  }, [q, value]);
+
+  const local = q
+    ? suggestions
+        .filter((p) => p.toLowerCase().includes(q))
+        .sort((a, b) => Number(b.toLowerCase().startsWith(q)) - Number(a.toLowerCase().startsWith(q)))
+    : [];
+  const matches = [...new Set([...(q.length >= 3 ? remote : []), ...local])]
+    .filter((p) => p.toLowerCase() !== q)
+    .slice(0, 7);
+  const show = open && matches.length > 0;
+  const listId = `${props.id}-list`;
+  const pick = (v: string) => {
+    setValue(v);
+    setOpen(false);
+    setActive(-1);
+  };
+
+  return (
+    <div className="relative">
+      <input
+        {...props}
+        value={value}
+        role="combobox"
+        aria-expanded={show}
+        aria-controls={listId}
+        aria-autocomplete="list"
+        aria-activedescendant={show && active >= 0 ? `${listId}-${active}` : undefined}
+        autoComplete="off"
+        onChange={(e) => {
+          setValue(e.target.value);
+          setOpen(true);
+          setActive(-1);
+        }}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (!show) return;
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setActive((active + 1) % matches.length);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setActive((active - 1 + matches.length) % matches.length);
+          } else if (e.key === "Enter" && active >= 0) {
+            e.preventDefault();
+            pick(matches[active]);
+          } else if (e.key === "Escape") setOpen(false);
+        }}
+      />
+      {show && (
+        <ul
+          id={listId}
+          role="listbox"
+          className="absolute z-20 mt-1 w-full overflow-hidden rounded-xl border border-ink-soft bg-cream shadow-xl"
+        >
+          {matches.map((m, i) => (
+            <li
+              key={m}
+              id={`${listId}-${i}`}
+              role="option"
+              aria-selected={i === active}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                pick(m);
+              }}
+              className={`cursor-pointer px-5 py-3 text-[1.0625rem] ${i === active ? "bg-sand text-heading" : "hover:bg-sand"}`}
+            >
+              {m}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 /**
  * Accessible form: visible labels, errors tied to fields, a live status
@@ -76,6 +196,8 @@ export function Form({
             </label>
             {f.type === "textarea" ? (
               <textarea {...common} rows={6} />
+            ) : f.suggest ? (
+              <SuggestInput {...common} defaultValue={common.defaultValue} suggestions={f.suggest} />
             ) : (
               <input {...common} type={f.type ?? "text"} />
             )}

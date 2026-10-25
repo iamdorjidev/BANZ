@@ -76,7 +76,7 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
                 <th className="py-3 pr-4">Name</th>
                 <th className="py-3 pr-4">Email</th>
                 <th className="py-3 pr-4">Phone</th>
-                <th className="py-3 pr-4">Town or city</th>
+                <th className="py-3 pr-4">Home address</th>
                 <th className="py-3 pr-4">Registered (NZ)</th>
                 <th className="py-3 pr-4">Confirmation</th>
                 <th className="py-3"><span className="sr-only">Remove</span></th>

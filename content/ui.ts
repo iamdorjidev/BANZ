@@ -70,7 +70,7 @@ export const ui = {
     name: L("Full name"),
     email: L("Email"),
     phone: L("Phone (optional)"),
-    city: L("Town or city"),
+    city: L("Home address"),
     message: L("Message"),
     send: L("Send message"),
     apply: L("Send application"),

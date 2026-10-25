@@ -50,7 +50,7 @@ export async function applyForMembership(_prev: FormState, data: FormData): Prom
     name: field(data, "name"),
     email: field(data, "email"),
     phone: field(data, "phone", 40),
-    city: field(data, "city", 80),
+    city: field(data, "city", 200),
   };
   if (isBot(data)) return { status: "registered" };
 
@@ -73,7 +73,7 @@ export async function applyForMembership(_prev: FormState, data: FormData): Prom
   await sendMail({
     subject: `New member: ${values.name} (${memberNo})`,
     replyTo: values.email,
-    text: [`${values.name} registered as a member.`, "", `Member number: ${memberNo}`, `Email: ${values.email}`, `Phone: ${values.phone || "—"}`, `Town or city: ${values.city}`].join("\n"),
+    text: [`${values.name} registered as a member.`, "", `Member number: ${memberNo}`, `Email: ${values.email}`, `Phone: ${values.phone || "—"}`, `Home address: ${values.city}`].join("\n"),
   });
 
   return { status: confirmation === "sent" ? "registered" : "registered-no-email", memberNo, values };

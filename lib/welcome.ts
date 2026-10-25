@@ -18,7 +18,7 @@ export async function sendWelcome(m: Pick<Member, "id" | "name" | "email" | "cit
       `Your member number: ${memberNo}`,
       `Name: ${m.name}`,
       `Email: ${m.email}`,
-      `Town or city: ${m.city}`,
+      `Home address: ${m.city}`,
       "",
       "A member of the committee will be in touch about gatherings and ways to get involved. If any of these details are wrong, just reply to this email.",
       "",
