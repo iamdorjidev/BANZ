@@ -75,6 +75,8 @@ export const ui = {
     dob: L("Date of birth"),
     idDocument: L("Identity document"),
     choose: L("Select…"),
+    idNumber: L("Identity document number"),
+    idNumberNote: L("Only the committee can see this. We check it against your original document in person."),
     email: L("Email"),
     phone: L("Phone (optional)"),
     city: L("Home address"),

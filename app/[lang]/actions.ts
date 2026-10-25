@@ -55,6 +55,7 @@ export async function applyForMembership(_prev: FormState, data: FormData): Prom
     phone: field(data, "phone", 40),
     dob: field(data, "dob", 10),
     id_document: field(data, "id_document", 40),
+    id_number: field(data, "id_number", 30),
     city: field(data, "city", 200),
   };
   if (isBot(data)) return { status: "registered" };
@@ -66,11 +67,12 @@ export async function applyForMembership(_prev: FormState, data: FormData): Prom
   const born = /^\d{4}-\d{2}-\d{2}$/.test(values.dob) ? new Date(values.dob) : null;
   if (!born || isNaN(born.getTime()) || born > new Date() || born.getUTCFullYear() < 1900) errors.dob = true;
   if (!(idDocuments as readonly string[]).includes(values.id_document)) errors.id_document = true;
+  if (!/^[A-Za-z0-9][A-Za-z0-9 \-]{3,29}$/.test(values.id_number)) errors.id_number = true;
   if (!values.city) errors.city = true;
   if (Object.keys(errors).length) return { status: "invalid", errors, values };
 
   const fullName = `${values.first_name} ${values.last_name}`;
-  const saved = await addMember({ firstName: values.first_name, lastName: values.last_name, dob: values.dob, idDocument: values.id_document, email: values.email, phone: values.phone, city: values.city });
+  const saved = await addMember({ firstName: values.first_name, lastName: values.last_name, dob: values.dob, idDocument: values.id_document, idNumber: values.id_number, email: values.email, phone: values.phone, city: values.city });
   if (saved.status === "unavailable") return { status: "error", values };
   if (saved.status === "duplicate") return { status: "duplicate", values };
 

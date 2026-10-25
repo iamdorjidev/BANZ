@@ -16,6 +16,8 @@ type Field = {
   fixed?: string;
   note?: Localized;
   max?: string;
+  /** Only shown once this other (select) field has a value. */
+  showWhen?: string;
   suggest?: string[];
   required?: boolean;
   autoComplete?: string;
@@ -158,6 +160,7 @@ export function Form({
 }) {
   const [state, formAction, pending] = useActionState(action, { status: "idle" });
   const id = useId();
+  const [chosen, setChosen] = useState<Record<string, string>>({});
 
   if (state.status === "sent" || state.status === "registered" || state.status === "registered-no-email") {
     return (
@@ -181,6 +184,7 @@ export function Form({
   return (
     <form action={formAction} noValidate className="space-y-7">
       {fields.map((f) => {
+        if (f.showWhen && !(chosen[f.showWhen] ?? state.values?.[f.showWhen])) return null;
         const fid = `${id}-${f.name}`;
         const invalid = !!state.errors?.[f.name];
         const common = {
@@ -208,7 +212,7 @@ export function Form({
                 )}
               </>
             ) : f.type === "select" ? (
-              <select {...common} defaultValue={common.defaultValue} className={`${input} appearance-auto`}>
+              <select {...common} onChange={(e) => setChosen((c) => ({ ...c, [f.name]: e.target.value }))} className={`${input} appearance-auto`}>
                 <option value="">{tr(ui.forms.choose, lang)}</option>
                 {f.options?.map((o) => (
                   <option key={o} value={o}>
@@ -222,6 +226,9 @@ export function Form({
               <SuggestInput {...common} defaultValue={common.defaultValue} suggestions={f.suggest} />
             ) : (
               <input {...common} type={f.type ?? "text"} max={f.max} />
+            )}
+            {f.fixed === undefined && f.note && (
+              <p className="mt-2 text-[0.9375rem] text-ink-soft">{tr(f.note, lang)}</p>
             )}
             {f.fixed === undefined && invalid && (
               <p id={`${fid}-err`} className="mt-2 text-[1rem] font-semibold text-heading">

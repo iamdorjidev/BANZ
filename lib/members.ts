@@ -11,6 +11,8 @@ export type Member = {
   last_name: string | null;
   dob: string | null; // "YYYY-MM-DD"
   id_document: string | null; // which document they hold: one of idDocuments
+  id_number: string | null;
+  id_verified: number; // 1 once the committee has checked the original
   email: string;
   phone: string | null;
   city: string;
@@ -36,7 +38,7 @@ async function db(): Promise<D1Database | null> {
   if (d && !ready.has(d)) {
     await d.prepare(CREATE).run();
     // Added after the first version: older databases get the column once.
-    for (const col of ["email_note TEXT", "first_name TEXT", "last_name TEXT", "dob TEXT", "id_document TEXT"]) {
+    for (const col of ["email_note TEXT", "first_name TEXT", "last_name TEXT", "dob TEXT", "id_document TEXT", "id_number TEXT", "id_verified INTEGER NOT NULL DEFAULT 0"]) {
       await d.prepare(`ALTER TABLE members ADD COLUMN ${col}`).run().catch(() => {});
     }
     await d.prepare(MESSAGES).run();
@@ -50,6 +52,7 @@ export async function addMember(m: {
   lastName: string;
   dob: string;
   idDocument: string;
+  idNumber: string;
   email: string;
   phone?: string;
   city: string;
@@ -60,8 +63,8 @@ export async function addMember(m: {
   const existing = await d.prepare("SELECT id FROM members WHERE email = ?").bind(email).first();
   if (existing) return { status: "duplicate" };
   const res = await d
-    .prepare("INSERT INTO members (name, first_name, last_name, dob, id_document, email, phone, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-    .bind(`${m.firstName} ${m.lastName}`, m.firstName, m.lastName, m.dob, m.idDocument, email, m.phone || null, m.city)
+    .prepare("INSERT INTO members (name, first_name, last_name, dob, id_document, id_number, email, phone, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+    .bind(`${m.firstName} ${m.lastName}`, m.firstName, m.lastName, m.dob, m.idDocument, m.idNumber, email, m.phone || null, m.city)
     .run();
   return { status: "created", id: Number(res.meta.last_row_id) };
 }
@@ -89,8 +92,8 @@ export async function listMembers(query = ""): Promise<{ members: Member[]; tota
   const q = `%${query.trim().replace(/[%_]/g, "")}%`;
   const { results } = query.trim()
     ? await d
-        .prepare("SELECT * FROM members WHERE name LIKE ? OR email LIKE ? OR city LIKE ? OR phone LIKE ? OR dob LIKE ? ORDER BY id DESC")
-        .bind(q, q, q, q, q)
+        .prepare("SELECT * FROM members WHERE name LIKE ? OR email LIKE ? OR city LIKE ? OR phone LIKE ? OR dob LIKE ? OR id_number LIKE ? ORDER BY id DESC")
+        .bind(q, q, q, q, q, q)
         .all<Member>()
     : await d.prepare("SELECT * FROM members ORDER BY id DESC").all<Member>();
   return { members: results, total, connected: true };
@@ -198,4 +201,9 @@ export async function getStats(): Promise<Stats> {
     ages: [...bands.map(({ label, n }) => ({ label, n })), ...(unknown ? [{ label: "Not given", n: unknown }] : [])],
     months,
   };
+}
+
+export async function setIdVerified(id: number, verified: boolean) {
+  const d = await db();
+  await d?.prepare("UPDATE members SET id_verified = ? WHERE id = ?").bind(verified ? 1 : 0, id).run();
 }

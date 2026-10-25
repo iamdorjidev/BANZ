@@ -1,6 +1,6 @@
 import { requireAdmin } from "@/lib/admin-auth";
 import { listMembers, memberNumber } from "@/lib/members";
-import { deleteMember } from "../actions";
+import { deleteMember, toggleIdVerified } from "../actions";
 import { ResendAll, ResendOne } from "@/components/ResendButtons";
 
 const nz = (utc: string) =>
@@ -92,7 +92,23 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin/memb
                   <td className="py-3 pr-4"><a href={`mailto:${m.email}`} className="prose-link">{m.email}</a></td>
                   <td className="py-3 pr-4">{m.phone ? <a href={`tel:${m.phone}`}>{m.phone}</a> : "—"}</td>
                   <td className="py-3 pr-4 whitespace-nowrap">{m.dob ?? "—"}</td>
-                  <td className="py-3 pr-4">{m.id_document ?? "—"}</td>
+                  <td className="py-3 pr-4">
+                    {m.id_document ? (
+                      <>
+                        {m.id_document}
+                        <p className="font-mono text-[0.875rem] text-ink-soft">{m.id_number ?? "—"}</p>
+                        <form action={toggleIdVerified} className="mt-1">
+                          <input type="hidden" name="id" value={m.id} />
+                          <input type="hidden" name="verified" value={m.id_verified ? "0" : "1"} />
+                          <button className={m.id_verified ? "font-semibold text-heading" : "text-ink-soft underline hover:text-heading"}>
+                            {m.id_verified ? "✓ Verified (undo)" : "Mark verified"}
+                          </button>
+                        </form>
+                      </>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
                   <td className="py-3 pr-4">{m.city}</td>
                   <td className="py-3 pr-4 whitespace-nowrap text-ink-soft">{nz(m.registered_at)}</td>
                   <td className="py-3 pr-4">

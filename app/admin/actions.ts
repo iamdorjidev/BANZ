@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { adminConfigured, endAdminSession, passwordOk, requireAdmin, startAdminSession } from "@/lib/admin-auth";
-import { getMember, membersWithoutEmail, removeMember, removeMessage } from "@/lib/members";
+import { getMember, membersWithoutEmail, removeMember, removeMessage, setIdVerified } from "@/lib/members";
 import { sendWelcome } from "@/lib/welcome";
 
 export type LoginState = { error?: string; name?: string };
@@ -65,5 +65,12 @@ export async function deleteMessage(form: FormData) {
   await requireAdmin();
   const id = Number(form.get("id"));
   if (Number.isInteger(id) && id > 0) await removeMessage(id);
+  revalidatePath("/admin", "layout");
+}
+
+export async function toggleIdVerified(form: FormData) {
+  await requireAdmin();
+  const id = Number(form.get("id"));
+  if (Number.isInteger(id) && id > 0) await setIdVerified(id, form.get("verified") === "1");
   revalidatePath("/admin", "layout");
 }

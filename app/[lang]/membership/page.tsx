@@ -86,6 +86,7 @@ export default async function MembershipPage({ params }: PageProps<"/[lang]/memb
                 { name: "phone", label: ui.forms.phone, type: "tel", autoComplete: "tel" },
                 { name: "dob", label: ui.forms.dob, type: "date", required: true, autoComplete: "bday", max: today },
                 { name: "id_document", label: ui.forms.idDocument, type: "select", required: true, options: idDocuments },
+                { name: "id_number", label: ui.forms.idNumber, required: true, showWhen: "id_document", note: ui.forms.idNumberNote },
                 { name: "city", label: ui.forms.city, required: true, autoComplete: "street-address", suggest: nzPlaces },
               ]}
             />
