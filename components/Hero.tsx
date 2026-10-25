@@ -41,19 +41,6 @@ export function Hero({ lang }: { lang: Locale }) {
             <ButtonLink href={href(lang, "/membership")}>
               <T t={ui.home.heroButton} lang={lang} />
             </ButtonLink>
-            <p className="flex items-center gap-4 text-[1rem] font-semibold">
-              {site.socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.url}
-                  rel="noopener"
-                  target="_blank"
-                  className="inline-flex min-h-11 items-center text-heading underline decoration-saffron decoration-2 underline-offset-4 hover:decoration-maroon"
-                >
-                  {s.label}
-                </a>
-              ))}
-            </p>
           </div>
         </div>
       </Container>
