@@ -38,12 +38,12 @@ export const executiveTerms: ExecutiveTerm[] = [
       { name: "Dr. Jamba Tobden", role: { en: "President" } },
       { name: "Mr. Galey Nima", role: { en: "General Secretary" } },
       { name: "Mr. Tandin Tshewang", role: { en: "Treasurer" } },
-      { name: "Mr. Thinley Dorji", role: { en: "Communications Officer" } },
       { name: "Mr. Sonam Gyaltshen", role: { en: "Religious and Special Envoy to Kunjung" } },
       { name: "Mr. Mipham Chogyel", role: { en: "Sports Officer" } },
       { name: "Mr. Nado", role: { en: "Cultural Officer" } },
       { name: "Mr. Phub Tshering", role: { en: "Welfare Officer" } },
       { name: "Dr. Tashi Wangchuk", role: { en: "Data and Employment Officer" } },
+      { name: "Mr. Thinley Dorji", role: { en: "Media andCommunications Officer" } },
     ],
   },
   {
