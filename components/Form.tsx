@@ -10,7 +10,7 @@ import { buttonMaroon } from "./ui";
 type Field = {
   name: string;
   label: Localized;
-  type?: "text" | "email" | "tel" | "textarea" | "date" | "select";
+  type?: "text" | "email" | "tel" | "textarea" | "date" | "select" | "radio";
   options?: readonly string[];
   /** Shown but not editable or submitted (e.g. the Member ID). */
   fixed?: string;
@@ -199,7 +199,7 @@ export function Form({
         };
         return (
           <div key={f.name}>
-            <label htmlFor={fid} className="block text-[1rem] font-medium">
+            <label id={`${fid}-label`} htmlFor={fid} className="block text-[1rem] font-medium">
               {tr(f.label, lang)}
             </label>
             {f.fixed !== undefined ? (
@@ -211,6 +211,26 @@ export function Form({
                   </p>
                 )}
               </>
+            ) : f.type === "radio" ? (
+              <div role="radiogroup" id={fid} aria-labelledby={`${fid}-label`} aria-describedby={invalid ? `${fid}-err` : undefined} className="mt-3 flex flex-wrap gap-3">
+                {f.options?.map((o) => (
+                  <label
+                    key={o}
+                    className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border bg-cream px-5 py-2 text-[1.0625rem] hover:border-ink ${invalid ? "border-maroon" : "border-ink-soft"}`}
+                  >
+                    <input
+                      type="radio"
+                      name={f.name}
+                      value={o}
+                      required={f.required}
+                      defaultChecked={state.values?.[f.name] === o}
+                      onChange={() => setChosen((c) => ({ ...c, [f.name]: o }))}
+                      className="h-5 w-5 accent-maroon"
+                    />
+                    {o}
+                  </label>
+                ))}
+              </div>
             ) : f.type === "select" ? (
               <select {...common} onChange={(e) => setChosen((c) => ({ ...c, [f.name]: e.target.value }))} className={`${input} appearance-auto`}>
                 <option value="">{tr(ui.forms.choose, lang)}</option>
