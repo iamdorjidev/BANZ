@@ -24,8 +24,13 @@ export const site = {
   phone: "022 036 1903",
   phoneTel: "+64220361903",
 
+  // Shown in the footer, on the Contact page and on the homepage photo.
+  // TODO(committee): if the community has a WhatsApp GROUP, replace the
+  // WhatsApp link with its invite link (chat.whatsapp.com/…). This one opens
+  // a chat with the Association's phone number.
   socials: [
     { label: "Facebook", url: "https://www.facebook.com/profile.php?id=61581117650908" },
+    { label: "WhatsApp", url: "https://wa.me/64220361903" },
   ],
 
   // A line break (\n) in the headline is kept on large screens.

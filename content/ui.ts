@@ -38,6 +38,10 @@ export const ui = {
 
   home: {
     ourStory: L("Our story"),
+    heroKicker: L("Membership is open"),
+    heroTitle: L("Be part of our community."),
+    heroText: L("Register as a member of the Bhutanese Association of New Zealand. It takes two minutes."),
+    heroButton: L("Register now"),
     whatWeDo: L("What we do"),
     events: L("Gatherings"),
     eventsLede: L("Festivals, celebrations and community days across New Zealand."),

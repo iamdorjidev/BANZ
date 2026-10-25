@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { href, type Locale } from "@/lib/i18n";
 import { ui } from "@/content/ui";
-import { buttonOutline, buttonPrimary, Container, T } from "./ui";
+import { Container, T } from "./ui";
 import { Seal } from "./Mark";
 import { HeaderShell, NavLinks } from "./NavLinks";
 import { MobileMenu } from "./MobileMenu";
@@ -12,6 +12,8 @@ const primaryNav = [
   { path: "/events", label: ui.nav.events },
   { path: "/community", label: ui.nav.community },
   { path: "/new-to-nz", label: ui.nav.newToNz },
+  { path: "/membership", label: ui.nav.membership },
+  { path: "/donate", label: ui.nav.donate },
   { path: "/contact", label: ui.nav.contact },
 ];
 
@@ -42,15 +44,6 @@ export function Header({ lang }: { lang: Locale }) {
               label: <T t={item.label} lang={lang} />,
             }))}
           />
-          <span aria-hidden className="h-6 w-px bg-line" />
-          <div className="flex items-center gap-2.5">
-            <Link href={href(lang, "/donate")} className={`${buttonOutline} min-h-11 px-5 text-[0.9375rem]`}>
-              <T t={ui.nav.donate} lang={lang} />
-            </Link>
-            <Link href={href(lang, "/membership")} className={`${buttonPrimary} min-h-11 px-5 text-[0.9375rem]`}>
-              <T t={ui.hero.join} lang={lang} />
-            </Link>
-          </div>
         </nav>
 
         <MobileMenu openLabel={<T t={ui.menu} lang={lang} />} closeLabel={<T t={ui.close} lang={lang} />}>
@@ -63,14 +56,6 @@ export function Header({ lang }: { lang: Locale }) {
               </li>
             ))}
           </ul>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href={href(lang, "/membership")} className={buttonPrimary}>
-              <T t={ui.hero.join} lang={lang} />
-            </Link>
-            <Link href={href(lang, "/donate")} className={buttonOutline}>
-              <T t={ui.nav.donate} lang={lang} />
-            </Link>
-          </div>
         </MobileMenu>
       </Container>
     </HeaderShell>
