@@ -22,7 +22,7 @@ export const site = {
 
   /** Public phone number, shown as written and dialled as `phoneTel`. */
   phone: "+64 210 694 687",
-  phoneTel: "+64220361903",
+  phoneTel: "+64210694687",
 
   // Shown in the footer, on the Contact page and on the homepage photo.
   // TODO(committee): if the community has a WhatsApp GROUP, replace the
@@ -30,7 +30,7 @@ export const site = {
   // a chat with the Association's phone number.
   socials: [
     { label: "Facebook", url: "https://www.facebook.com/profile.php?id=61581117650908" },
-    { label: "WhatsApp", url: "https://wa.me/64220361903" },
+    { label: "WhatsApp", url: "https://wa.me/64210694687" },
   ],
 
   // A line break (\n) in the headline is kept on large screens.
@@ -47,7 +47,7 @@ export const site = {
   } satisfies Localized,
 
   /** Credit line in the footer. */
-  credit: { label: "Website by enVision Studio", url: "" },
+  credit: { label: "Website by enVision Studio", url: "https://envisionstudio.co.nz/" },
 };
 
 /**
