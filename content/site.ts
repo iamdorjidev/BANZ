@@ -18,10 +18,10 @@ export const site = {
   founded: 2025,
 
   // TODO(committee): confirm the public contact email and whether it is monitored.
-  email: "hello@banz.org.nz",
+  email: "info@bhutanese.org.nz",
 
   /** Public phone number, shown as written and dialled as `phoneTel`. */
-  phone: "022 036 1903",
+  phone: "+64 210 694 687",
   phoneTel: "+64220361903",
 
   // Shown in the footer, on the Contact page and on the homepage photo.

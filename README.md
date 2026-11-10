@@ -122,7 +122,7 @@ confirmation email went out), search them, download them all as a spreadsheet
 | `ADMIN_PASSWORD` | Password for the committee area (secret) |
 | `SESSION_SECRET` | 32+ random characters that keep sign-ins secure (secret) |
 | `RESEND_API_KEY` | API key from resend.com (secret) — sends the emails |
-| `MAIL_FROM` | Sender, e.g. `BANZ <hello@banz.org.nz>` — the domain must be verified in Resend |
+| `MAIL_FROM` | Sender, e.g. `BANZ <info@bhutanese.org.nz>` — the domain must be verified in Resend |
 | `MAIL_TO` | Committee inbox for "new member" and contact-form emails (comma-separate several) |
 
 When someone registers they get a confirmation email with their member number

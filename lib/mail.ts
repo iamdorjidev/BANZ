@@ -5,7 +5,7 @@ import { envVar } from "./env";
  * Sends email through Resend (https://resend.com) using its HTTP API.
  * Set these in the Cloudflare Worker (Settings → Variables and Secrets):
  *   RESEND_API_KEY   API key (secret)
- *   MAIL_FROM        e.g. "BANZ <hello@banz.org.nz>" — the domain must be verified in Resend
+ *   MAIL_FROM        e.g. "BANZ <info@bhutanese.org.nz>" — the domain must be verified in Resend
  *   MAIL_TO          where committee notifications are delivered (comma-separated for several)
  *
  * Message contents are never logged.

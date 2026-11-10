@@ -42,7 +42,7 @@ export const executiveTerms: ExecutiveTerm[] = [
       { name: "Mr. Mipham Chogyel", role: { en: "Sports Officer" } },
       { name: "Mr. Nado", role: { en: "Cultural Officer" } },
       { name: "Mr. Phub Tshering", role: { en: "Welfare Officer" } },
-      { name: "Dr. Tashi Wangchuk", role: { en: "Data and Employment Officer" } },
+      { name: "Mr. Tashi Wangchuk", role: { en: "Data and Employment Officer" } },
       { name: "Mr. Thinley Dorji", role: { en: "Media andCommunications Officer" } },
     ],
   },
