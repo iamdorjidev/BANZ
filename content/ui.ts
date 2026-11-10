@@ -78,7 +78,7 @@ export const ui = {
     idNumber: L("Identity document number"),
     idNumberNote: L("Only the committee can see this. We check it against your original document in person."),
     email: L("Email"),
-    phone: L("Phone (optional)"),
+    phone: L("Phone"),
     city: L("Home address"),
     message: L("Message"),
     send: L("Send message"),
