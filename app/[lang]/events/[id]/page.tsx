@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { href, isLocale, tr } from "@/lib/i18n";
+import { href, isLocale, locales, tr } from "@/lib/i18n";
 import { dateParts } from "@/lib/dates";
 import { ui } from "@/content/ui";
 import { events } from "@/content/events";
@@ -10,6 +10,12 @@ import { visible } from "@/lib/drafts";
 import { Container, T } from "@/components/ui";
 
 const find = (id: string) => visible(events).find((e) => e.id === id);
+
+// Built ahead of time, one page per event, so nothing is rendered on demand.
+export const dynamicParams = false;
+export function generateStaticParams() {
+  return locales.flatMap((lang) => events.map((e) => ({ lang, id: e.id })));
+}
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/events/[id]">): Promise<Metadata> {
   const { lang, id } = await params;
