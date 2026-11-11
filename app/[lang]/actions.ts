@@ -67,7 +67,12 @@ export async function applyForMembership(_prev: FormState, data: FormData): Prom
   const born = /^\d{4}-\d{2}-\d{2}$/.test(values.dob) ? new Date(values.dob) : null;
   if (!born || isNaN(born.getTime()) || born > new Date() || born.getUTCFullYear() < 1900) errors.dob = true;
   if (!(idDocuments as readonly string[]).includes(values.id_document)) errors.id_document = true;
-  if (!/^[A-Za-z0-9][A-Za-z0-9 \-]{3,29}$/.test(values.id_number)) errors.id_number = true;
+  // A Bhutanese CID is exactly 11 digits; passport and licence numbers are letters and digits.
+  const idOk =
+    values.id_document === "CID"
+      ? /^\d{11}$/.test(values.id_number)
+      : /^[A-Za-z0-9][A-Za-z0-9 \-]{3,29}$/.test(values.id_number);
+  if (!idOk) errors.id_number = true;
   if (!values.city) errors.city = true;
   if (Object.keys(errors).length) return { status: "invalid", errors, values };
 

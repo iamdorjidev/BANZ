@@ -187,6 +187,15 @@ export function Form({
         if (f.showWhen && !(chosen[f.showWhen] ?? state.values?.[f.showWhen])) return null;
         const fid = `${id}-${f.name}`;
         const invalid = !!state.errors?.[f.name];
+        const isCid = f.name === "id_number" && (chosen.id_document ?? state.values?.id_document) === "CID";
+        const message =
+          f.name === "id_number" && (state.values?.[f.name] ?? "") !== ""
+            ? ui.forms[isCid ? "cidInvalid" : "idInvalid"]
+            : f.name === "dob" && (state.values?.dob ?? "") !== ""
+              ? ui.forms.dobInvalid
+              : f.type === "email" && (state.values?.[f.name] ?? "") !== ""
+                ? ui.forms.emailInvalid
+                : ui.forms.required;
         const common = {
           id: fid,
           name: f.name,
@@ -245,14 +254,19 @@ export function Form({
             ) : f.suggest ? (
               <SuggestInput {...common} defaultValue={common.defaultValue} suggestions={f.suggest} />
             ) : (
-              <input {...common} type={f.type ?? "text"} max={f.max} />
+              <input
+                {...common}
+                type={f.type ?? "text"}
+                max={f.max}
+                {...(isCid ? { inputMode: "numeric" as const, maxLength: 11, pattern: "\\d{11}", title: tr(ui.forms.cidInvalid, lang) } : {})}
+              />
             )}
             {f.fixed === undefined && f.note && (
               <p className="mt-2 text-[0.9375rem] text-ink-soft">{tr(f.note, lang)}</p>
             )}
             {f.fixed === undefined && invalid && (
               <p id={`${fid}-err`} className="mt-2 text-[1rem] font-semibold text-heading">
-                {tr(ui.forms.required, lang)}
+                {tr(message, lang)}
               </p>
             )}
           </div>

@@ -58,14 +58,13 @@ export const site = {
  * `position` chooses which part of the photo stays visible when it is
  * cropped to fit the screen ("50% 50%" = centre).
  */
-import heroPhoto from "@/public/images/prayer-gathering.jpg";
+import heroPhoto from "@/public/images/Website_Banner_1920x640.png";
 import type { StaticImageData } from "next/image";
 
 export const heroImage: { src: StaticImageData | null; alt: Localized; position: string } = {
   src: heroPhoto,
-  // TODO(committee): confirm the event, and that the people pictured (including the child) are happy for it to be published.
   alt: {
-    en: "Rows of the Bhutanese community in gho and kira standing with palms together in a sunlit hall in Auckland.",
+    en: "Happy Birthday Your Majesty! On the 71st Birth Anniversary of His Majesty the Fourth Druk Gyalpo, Jigme Singye Wangchuck, the Bhutanese Association of New Zealand offers its deepest reverence, gratitude and heartfelt prayers for His Majesty's good health, well-being and long life.",
   },
   position: "45% 55%",
 };
