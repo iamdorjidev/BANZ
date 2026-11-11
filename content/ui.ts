@@ -57,6 +57,8 @@ export const ui = {
     past: L("Past events"),
     none: L("No upcoming events — check back soon."),
     noPast: L("Past events will appear here."),
+    more: L("Read more and see photos"),
+    back: L("All events"),
   },
 
   footer: {

@@ -22,22 +22,22 @@ export const gallery: GalleryPhoto[] = [
   {
     src: "/images/temple-gathering.jpg",
     alt: { en: "A large group of the community, many in gho and kira, gathered together inside a richly painted temple." },
-    caption: { en: "The community gathered together at the temple." },
+    caption: { en: "" },
   },
   {
     src: "/images/prayer-gathering.jpg",
     alt: { en: "Rows of community members in gho and kira standing with palms together in a sunlit hall, facing a lama." },
-    caption: { en: "Prayers together in Auckland." },
+    caption: { en: "" },
   },
   {
     src: "/images/community-gathering.jpg",
     alt: { en: "The community gathered on stage, many wearing matching T-shirts, in front of a projected photograph of Their Majesties." },
-    caption: { en: "A community celebration on stage." },
+    caption: { en: "" },
   },
   {
     // Religious image: shown only as a captioned photograph, never as decoration.
     src: "/images/monks-buddha-statue.jpg",
     alt: { en: "Monks in maroon robes walking in front of a large seated Buddha statue set among trees." },
-    caption: { en: "Monks at the Buddha statue." },
+    caption: { en: "" },
   },
 ];
