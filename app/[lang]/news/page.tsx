@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
-import { isLocale } from "@/lib/i18n";
+import { isLocale, tr } from "@/lib/i18n";
 import { formatDate } from "@/lib/dates";
 import { visible } from "@/lib/drafts";
 import { news } from "@/content/news";
@@ -34,6 +35,11 @@ export default async function NewsPage({ params }: PageProps<"/[lang]/news">) {
                 <h2 className="font-display text-[clamp(1.875rem,3vw,2.5rem)] leading-tight text-heading">
                   <T t={n.title} lang={lang} />
                 </h2>
+                {n.image && (
+                  <div className="relative mt-8 aspect-[2048/1038] max-w-3xl overflow-hidden rounded-2xl bg-sand">
+                    <Image src={n.image.src} alt={tr(n.image.alt, lang)} fill sizes="(min-width: 1024px) 768px, 100vw" className="object-cover" />
+                  </div>
+                )}
                 <div className="measure mt-6 space-y-4 text-[1.125rem] text-ink-soft">
                   {n.body.en.split(/\n\s*\n/).map((para, i) => (
                     <p key={i}>{para}</p>
