@@ -29,19 +29,15 @@ export const news: NewsItem[] = [
       alt: { en: "The video call between the President and Executive Members of BANZ and the Royal Bhutanese Embassy in Australia." },
     },
     body: {
-      en: `The Bhutanese Association of New Zealand (BANZ) was honoured to participate in a virtual meeting with the Royal Bhutanese Embassy in Canberra, Australia.
-
-The meeting brought together the President and Executive Members of BANZ and the Kutshab and officials from the Embassy.
+      en: `The President and Executive Members of the Bhutanese Association of New Zealand (BANZ) were honoured to participate in a virtual meeting with the Kutshab and officials of the Royal Bhutanese Embassy in Canberra, Australia.
 
 During the meeting, the Embassy congratulated the newly appointed executive team and expressed confidence in their commitment to serving the Bhutanese community in New Zealand.
 
-Discussions focused on the wellbeing of the Bhutanese community, BANZ activities, key challenges faced by the community, and opportunities for future support and collaboration.
+Discussions focused on the wellbeing of the Bhutanese community, BANZ activities, key challenges, and opportunities for future support and collaboration.
 
 BANZ sincerely appreciates the Embassy’s encouragement, guidance, and continued interest in the wellbeing of Bhutanese living in New Zealand.
 
-We look forward to working closely with the Royal Bhutanese Embassy to strengthen our community, promote unity, and foster meaningful connections among Bhutanese in New Zealand.
-
-Together, we look forward to building a stronger and more connected Bhutanese community.`,
+The President and Executive Members look forward to working closely with the Royal Bhutanese Embassy to strengthen unity and build a stronger, more connected Bhutanese community in New Zealand.`,
     },
   },
 ];
