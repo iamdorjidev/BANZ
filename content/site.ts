@@ -12,7 +12,7 @@ export const site = {
   name: "Bhutanese Association of New Zealand",
   shortName: "BANZ",
   // TODO(committee): confirm the domain that has been (or will be) registered.
-  url: "https://banz.org.nz",
+  url: "https://bhutanese.org.nz",
 
   location: "Auckland, New Zealand",
   founded: 2025,
