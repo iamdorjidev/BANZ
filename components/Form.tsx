@@ -165,7 +165,7 @@ export function Form({
   if (state.status === "sent" || state.status === "registered" || state.status === "registered-no-email") {
     return (
       <div role="status">
-        <p className="font-display text-[1.75rem] leading-snug text-heading">{tr(success, lang)}</p>
+        <p className="font-display text-[1.75rem] leading-snug text-heading">{tr(state.status === "registered-no-email" ? ui.forms.appliedNoEmail : success, lang)}</p>
         {state.memberNo && (
           <p className="mt-4 text-[1.125rem]">
             {tr(ui.forms.memberNo, lang)}: <strong className="text-heading">{state.memberNo}</strong>

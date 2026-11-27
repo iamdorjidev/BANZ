@@ -16,10 +16,20 @@ export const membership = {
   // TODO(committee): is there a fee? If so, how much and how is it paid?
   fee: { en: "Membership is currently free." } satisfies Localized,
 
+  // From the "Are you a member yet?" poster.
   benefits: [
-    { title: { en: "A voice" }, text: { en: "Have your say in how the Association is run and who leads it." } },
-    { title: { en: "First to know" }, text: { en: "Hear about gatherings, festivals and notices before they are announced publicly." } },
-    { title: { en: "Support when it matters" }, text: { en: "Be part of the network that rallies around members in hardship, illness or loss." } },
-    { title: { en: "A way to give back" }, text: { en: "Volunteer, mentor a newcomer, or share your skills with the community." } },
-  ] satisfies { title: Localized; text: Localized }[],
+    { en: "Support during family loss, fire and emergencies" },
+    { en: "Help with family issues, including domestic violence" },
+    { en: "Guidance after theft, break-ins and legal matters" },
+    { en: "Support for newcomers settling in New Zealand" },
+    { en: "Help with NZ rules, including road incidents" },
+    { en: "A united community where you belong" },
+  ] satisfies Localized[],
+
+  withoutJoining: [
+    { en: "You may miss important updates and support" },
+    { en: "You'll be on your own in difficult times" },
+    { en: "You may not know where to get help" },
+    { en: "You could feel isolated in a new country" },
+  ] satisfies Localized[],
 };
